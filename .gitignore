@@ -1,2 +1,9 @@
+# Xcode user-specific data
+xcuserdata/
+*.xcuserstate
 
-docs/documentation/donortrack/tipjarview/layoutvalue(key:value:)/index.html
+# macOS
+.DS_Store
+
+# Generated docs
+docs/

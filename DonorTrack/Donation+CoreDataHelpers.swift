@@ -14,6 +14,13 @@ extension DonationEntity {
 		set { startTime = newValue }
 	}
 
+	@objc
+	var donationMonth: String {
+		let isSameYear = Calendar.current.isDate(donationStartTime, equalTo: .now, toGranularity: .year)
+		let yearText = isSameYear ? "" : ", \(donationStartTime.formatted(.dateTime.year()))"
+		return "\(donationStartTime.formatted(.dateTime.month(.wide)))\(yearText)"
+	}
+
 	var donationEndTime: Date {
 		get { endTime ?? .now }
 		set { endTime = newValue }
@@ -27,6 +34,20 @@ extension DonationEntity {
 	var donationNotes: String {
 		get { notes ?? "" }
 		set { notes = newValue }
+	}
+
+	var donationStartOfWeek: Date {
+		donationStartTime.startOfWeek()
+	}
+
+	@objc
+	var donationMonthAndYear: String {
+		donationStartTime.formatted(.dateTime.month().year())
+	}
+
+	@objc
+	var donationYear: String {
+		donationStartTime.formatted(.dateTime.year())
 	}
 
 	var durationString: String {
@@ -70,12 +91,32 @@ extension DonationEntity {
 		}
 	}
 
+	static func filter(with text: String) -> NSPredicate {
+		text.isEmpty ? NSPredicate(value: true) : NSPredicate(format: "notes CONTAINS[cd] %@", text)
+//		switch config.filter {
+//		case .all:
+//			return config.query.isEmpty ? NSPredicate(value: true) : NSPredicate(format: "notes CONTAINS[cd] %@", config.query)
+//		case .lowProtein:
+//			return config.query.isEmpty ? NSPredicate(format: "protein <= 6.3") :
+//			NSPredicate(format: "notes CONTAINS[cd] %@ AND protein <= 6.3", config.query)
+//		}
+	}
+
 	static func sort(order: Sort) -> [NSSortDescriptor] {
 		[NSSortDescriptor(keyPath: \DonationEntity.startTime, ascending: order == .oldestFirst)]
 	}
 
 	static func all() -> NSFetchRequest<DonationEntity> {
 		let request = fetchRequest()
+		request.sortDescriptors = [
+			NSSortDescriptor(keyPath: \DonationEntity.startTime, ascending: false)
+		]
+		return request
+	}
+
+	static func recent() -> NSFetchRequest<DonationEntity> {
+		let request = fetchRequest()
+		request.fetchLimit = 10
 		request.sortDescriptors = [
 			NSSortDescriptor(keyPath: \DonationEntity.startTime, ascending: false)
 		]

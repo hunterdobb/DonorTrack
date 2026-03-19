@@ -8,15 +8,12 @@
 import SwiftUI
 
 struct SettingsView: View {
-	@AppStorage(UDKeys.hapticsEnabled) private var isHapticsEnabled = true
-
-	@EnvironmentObject private var store: TipStore
 	@EnvironmentObject private var reviewsManager: ReviewRequestManager
-
+	@AppStorage(UDKeys.hapticsEnabled) private var isHapticsEnabled = true
 	@Environment(\.openURL) var openURL
 
 	var body: some View {
-		NavigationStack {
+		NavigationSplitView {
 			Form {
 				Section {
 					hapticsToggle
@@ -34,8 +31,11 @@ struct SettingsView: View {
 					}
 				}
 			}
+			.sidebarToggleRemoved
 			.navigationTitle("Settings")
 			
+		} detail: {
+			Text("Make Selection")
 		}
     }
 
@@ -64,7 +64,6 @@ private extension SettingsView {
 	var tipJar: some View {
 		NavigationLink {
 			TipJarView()
-				.environmentObject(store)
 		} label: {
 			HStack(alignment: .lastTextBaseline) {
 				Image(systemName: "bag.fill")

@@ -26,13 +26,13 @@ class NewDonationActivity: ObservableObject {
 extension NewDonationView {
 	@MainActor
     class ViewModel: ObservableObject {
-		@AppStorage("startTime") var startTime = Date.distantFuture.timeIntervalSince1970
-		@AppStorage("endTime") var endTime = Date.distantFuture.timeIntervalSince1970
-		@AppStorage("amountText") var amountText = ""
-		@AppStorage("proteinText") var proteinText = ""
+		@AppStorage("startTime") var startTime 		= Date.distantFuture.timeIntervalSince1970
+		@AppStorage("endTime") var endTime 			= Date.distantFuture.timeIntervalSince1970
+		@AppStorage("amountText") var amountText 	= ""
+		@AppStorage("proteinText") var proteinText 	= ""
 		@AppStorage("compensationText") var compensationText = ""
-		@AppStorage("cycleCount") var cycleCount = 0
-		@AppStorage("notes") var notes = ""
+		@AppStorage("cycleCount") var cycleCount 	= 0
+		@AppStorage("notes") var notes				= ""
 		@AppStorage("donationState") var donationState: NewDonationState = .idle
 
 		// Used for the saved checkmark animation

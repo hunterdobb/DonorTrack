@@ -40,8 +40,10 @@
 		B595C0512992A9B400F80A68 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B595C0502992A9B400F80A68 /* StoreKit.framework */; };
 		B595C0542992BBE700F80A68 /* TipProductIdentifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = B595C0532992BBE700F80A68 /* TipProductIdentifiers.swift */; };
 		B595C0562992BC7D00F80A68 /* TipStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B595C0552992BC7D00F80A68 /* TipStore.swift */; };
+		B59CC6BA2BCADC9D006A26A4 /* RemoveSidebarToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59CC6B92BCADC9D006A26A4 /* RemoveSidebarToggle.swift */; };
 		B5A61DAE297ECD6A0065FADC /* ModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5A61DAD297ECD6A0065FADC /* ModelTests.swift */; };
 		B5C208E329B7AFAD00CFEFDD /* DonorTrack.docc in Sources */ = {isa = PBXBuildFile; fileRef = B5C208E229B7AFAD00CFEFDD /* DonorTrack.docc */; };
+		B5C494272BD69E0200E27022 /* DonationYearListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5C494262BD69E0200E27022 /* DonationYearListView.swift */; };
 		B5CDFA97298DACE4005072BC /* CheckmarkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5CDFA96298DACE4005072BC /* CheckmarkView.swift */; };
 		B5D65E1C29DC65D500AF0D2E /* WhiteGroupBoxStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D65E1B29DC65D500AF0D2E /* WhiteGroupBoxStyle.swift */; };
 		B5D65E1E29DCBB9A00AF0D2E /* NewDonationAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D65E1D29DCBB9A00AF0D2E /* NewDonationAttributes.swift */; };
@@ -89,6 +91,7 @@
 		B50D2E472BC1EA4300CBD85D /* DonorTrackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonorTrackTests.swift; sourceTree = "<group>"; };
 		B50D2E492BC2124D00CBD85D /* Donation+CoreDataHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Donation+CoreDataHelpers.swift"; sourceTree = "<group>"; };
 		B50D2E4C2BC5FA4200CBD85D /* NumberFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFormatter.swift; sourceTree = "<group>"; };
+		B50D2E4E2BC601EB00CBD85D /* DonorTrack.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DonorTrack.entitlements; sourceTree = "<group>"; };
 		B51C4BB82972032800FEEF50 /* DonorTrack.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DonorTrack.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B51C4BBB2972032800FEEF50 /* DonorTrackApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonorTrackApp.swift; sourceTree = "<group>"; };
 		B51C4BBD2972032800FEEF50 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -122,9 +125,11 @@
 		B595C0522992B73E00F80A68 /* MyTipsStoreKitConfig.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = MyTipsStoreKitConfig.storekit; sourceTree = "<group>"; };
 		B595C0532992BBE700F80A68 /* TipProductIdentifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipProductIdentifiers.swift; sourceTree = "<group>"; };
 		B595C0552992BC7D00F80A68 /* TipStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipStore.swift; sourceTree = "<group>"; };
+		B59CC6B92BCADC9D006A26A4 /* RemoveSidebarToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoveSidebarToggle.swift; sourceTree = "<group>"; };
 		B5A61DA4297ECD200065FADC /* DonorTrackTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DonorTrackTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5A61DAD297ECD6A0065FADC /* ModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelTests.swift; sourceTree = "<group>"; };
 		B5C208E229B7AFAD00CFEFDD /* DonorTrack.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = DonorTrack.docc; sourceTree = "<group>"; };
+		B5C494262BD69E0200E27022 /* DonationYearListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonationYearListView.swift; sourceTree = "<group>"; };
 		B5CDFA96298DACE4005072BC /* CheckmarkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckmarkView.swift; sourceTree = "<group>"; };
 		B5D65E1B29DC65D500AF0D2E /* WhiteGroupBoxStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhiteGroupBoxStyle.swift; sourceTree = "<group>"; };
 		B5D65E1D29DCBB9A00AF0D2E /* NewDonationAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDonationAttributes.swift; sourceTree = "<group>"; };
@@ -189,6 +194,7 @@
 		B51C4BBA2972032800FEEF50 /* DonorTrack */ = {
 			isa = PBXGroup;
 			children = (
+				B50D2E4E2BC601EB00CBD85D /* DonorTrack.entitlements */,
 				B51C4BE62973839E00FEEF50 /* Activities */,
 				B51C4BDF2972FCD500FEEF50 /* Extensions */,
 				B5457BB829FB0851002C2AA6 /* Configuration */,
@@ -217,6 +223,7 @@
 		B51C4BDF2972FCD500FEEF50 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				B59CC6B82BCADC7E006A26A4 /* ViewModifiers */,
 				B51C4BEF2975A45400FEEF50 /* Date-Formatting.swift */,
 				B50D2E4C2BC5FA4200CBD85D /* NumberFormatter.swift */,
 			);
@@ -226,12 +233,12 @@
 		B51C4BE62973839E00FEEF50 /* Activities */ = {
 			isa = PBXGroup;
 			children = (
-				B595C04A29929B0D00F80A68 /* TipJar */,
-				B5359EC1298EAE2400566111 /* Settings */,
-				B51C4C012978CA4A00FEEF50 /* DonationDetail */,
-				B51C4BFE2978C70700FEEF50 /* EditDonation */,
 				B51C4BE82973842B00FEEF50 /* NewDonation */,
 				B51C4BF729761F2A00FEEF50 /* DonationHistory */,
+				B51C4C012978CA4A00FEEF50 /* DonationDetail */,
+				B51C4BFE2978C70700FEEF50 /* EditDonation */,
+				B5359EC1298EAE2400566111 /* Settings */,
+				B595C04A29929B0D00F80A68 /* TipJar */,
 				B51C4BE72973841800FEEF50 /* Components */,
 			);
 			path = Activities;
@@ -248,10 +255,10 @@
 		B51C4BE82973842B00FEEF50 /* NewDonation */ = {
 			isa = PBXGroup;
 			children = (
-				B53C99472A01CC4C0034EE90 /* NewDonation.swift */,
-				B51C4BE22973008500FEEF50 /* ValueField.swift */,
-				B51C4BEB2974BB6000FEEF50 /* NewDonationViewModel.swift */,
 				B51C4BC92972049800FEEF50 /* NewDonationView.swift */,
+				B51C4BEB2974BB6000FEEF50 /* NewDonationViewModel.swift */,
+				B51C4BE22973008500FEEF50 /* ValueField.swift */,
+				B53C99472A01CC4C0034EE90 /* NewDonation.swift */,
 			);
 			path = NewDonation;
 			sourceTree = "<group>";
@@ -269,9 +276,10 @@
 			isa = PBXGroup;
 			children = (
 				B51C4BCB297204B500FEEF50 /* DonationsListView.swift */,
+				B5C494262BD69E0200E27022 /* DonationYearListView.swift */,
+				B51C4BF82976EDD200FEEF50 /* DonationsListViewModel.swift */,
 				B51C4BD9297212F600FEEF50 /* DonationRowView.swift */,
 				B5D65E1B29DC65D500AF0D2E /* WhiteGroupBoxStyle.swift */,
-				B51C4BF82976EDD200FEEF50 /* DonationsListViewModel.swift */,
 			);
 			path = DonationHistory;
 			sourceTree = "<group>";
@@ -333,6 +341,14 @@
 				B5D65E2629DCEAB500AF0D2E /* SwiftUI.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B59CC6B82BCADC7E006A26A4 /* ViewModifiers */ = {
+			isa = PBXGroup;
+			children = (
+				B59CC6B92BCADC9D006A26A4 /* RemoveSidebarToggle.swift */,
+			);
+			path = ViewModifiers;
 			sourceTree = "<group>";
 		};
 		B5A61DA5297ECD200065FADC /* DonorTrackTests */ = {
@@ -498,7 +514,9 @@
 				B5D65E1E29DCBB9A00AF0D2E /* NewDonationAttributes.swift in Sources */,
 				B51C4BF92976EDD200FEEF50 /* DonationsListViewModel.swift in Sources */,
 				B51C4BF52975EA4900FEEF50 /* HapticManager.swift in Sources */,
+				B5C494272BD69E0200E27022 /* DonationYearListView.swift in Sources */,
 				B5CDFA97298DACE4005072BC /* CheckmarkView.swift in Sources */,
+				B59CC6BA2BCADC9D006A26A4 /* RemoveSidebarToggle.swift in Sources */,
 				B595C04E2992A80700F80A68 /* TipJarRow.swift in Sources */,
 				B50D2E4D2BC5FA4200CBD85D /* NumberFormatter.swift in Sources */,
 				B5C208E329B7AFAD00CFEFDD /* DonorTrack.docc in Sources */,
@@ -680,6 +698,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = DonorTrack/DonorTrack.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"DonorTrack/Preview Content\"";
@@ -691,7 +710,6 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "Donor Track";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -709,7 +727,7 @@
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -719,6 +737,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = DonorTrack/DonorTrack.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"DonorTrack/Preview Content\"";
@@ -730,7 +749,6 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "Donor Track";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -748,7 +766,7 @@
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

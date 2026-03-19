@@ -9,9 +9,8 @@ import StoreKit
 import SwiftUI
 
 struct DonationsListView: View {
-	//	@ObservedObject var vm: ViewModel
 	@StateObject var vm: ViewModel
-	@EnvironmentObject var dataController: DataController
+	@EnvironmentObject private var dataController: DataController
 	@State private var showEditNewDonation = false
 
 	// Environment value to call as a function to trigger review dialog
@@ -20,38 +19,66 @@ struct DonationsListView: View {
 
 	@FetchRequest(fetchRequest: DonationEntity.all()) var donations
 
-	//	@SectionedFetchRequest<String, DonationEntity>(
-	//		sectionIdentifier: \DonationEntity.monthString,
-	//		sortDescriptors: [SortDescriptor(\.monthString, order: .reverse)]
-	//	)
-	//	private var sectionDonations: SectionedFetchResults<String, DonationEntity>
+	@FetchRequest var recentDonations: FetchedResults<DonationEntity>
+	@SectionedFetchRequest var sectionedCurrentYearDonations: SectionedFetchResults<String, DonationEntity>
+	@SectionedFetchRequest var sectionedPreviousYearDonations: SectionedFetchResults<String, DonationEntity>
+
+	@State private var searchText = ""
+
+	var searchResults: [DonationEntity] {
+		donations.filter { donation in
+			donation.donationNotes.contains(searchText)
+		}
+	}
 
 	init(dataController: DataController) {
 		let viewModel = ViewModel(dataController: dataController)
 		_vm = StateObject(wrappedValue: viewModel)
+
+		_recentDonations = FetchRequest(fetchRequest: dataController.recentDonations())
+		_sectionedCurrentYearDonations = SectionedFetchRequest(
+			fetchRequest: dataController.currentYearDonations(),
+			sectionIdentifier: \.donationMonth
+		)
+		_sectionedPreviousYearDonations = SectionedFetchRequest(
+			fetchRequest: dataController.previousYearDonations(),
+			sectionIdentifier: \.donationYear
+		)
 	}
+
+	@State private var selectedItem: DonationEntity?
 
 	var body: some View {
 		NavigationStack {
 			ZStack {
-				if donations.isEmpty && vm.searchConfig.query.isEmpty {
+				if donations.isEmpty && searchText.isEmpty {
 					emptyStateView.padding(.bottom, 100)
 
-				} else if donations.isEmpty && !vm.searchConfig.query.isEmpty {
+				} else if donations.isEmpty && !searchText.isEmpty {
 					Text("No Results")
 						.frame(maxHeight: .infinity, alignment: .top)
 						.padding(.top)
+				} else if !searchText.isEmpty {
+					List(selection: $selectedItem) {
+						ForEach(searchResults) { donation in
+							NavigationLink {
+								DonationDetailView(donation: donation)
+							} label: {
+								DonationRowView(donation: donation, showNotes: !searchText.isEmpty)
+							}
+						}
+					}
 				} else {
 					VStack {
-						List {
-							if vm.searchConfig.query.isEmpty && vm.searchConfig.filter == .all {
+						List(selection: $selectedItem) {
+							if vm.searchText.isEmpty && vm.searchConfig.filter == .all {
 								Section {
 									HStack {
 										totalCompensation
 										totalDonations
 									}
 									.listRowBackground(Color.clear)
-									.listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+									.listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
 									.listRowSeparator(.hidden)
 								} header: {
 									totalHeader
@@ -59,56 +86,76 @@ struct DonationsListView: View {
 								.textCase(nil)
 							}
 
-							ForEach(vm.groupDonationsByMonth(donations), id: \.self) { (months: [DonationEntity]) in
-								Section { // header below, shows month
-									ForEach(months) { donation in
-										NavigationLink(value: donation) {
-											DonationRowView(
-												donation: donation,
-												dataController: dataController,
-												showNotes: $vm.showNotes
-											)
-											.swipeActions(allowsFullSwipe: false) {
-												deleteButton(donation: donation)
-												editButton(donation: donation)
+							Section("Latest Donations") {
+								ForEach(recentDonations) { donation in
+									NavigationLink {
+										DonationDetailView(donation: donation)
+									} label: {
+										DonationRowView(donation: donation, showNotes: false)
+									}
+								}
+							}
+
+							if sectionedCurrentYearDonations.isEmpty == false {
+								Section {
+									ForEach(sectionedCurrentYearDonations) { donationsSection in
+										NavigationLink {
+											List {
+												ForEach(donationsSection) { donation in
+													NavigationLink {
+														DonationDetailView(donation: donation)
+													} label: {
+														DonationRowView(donation: donation, showNotes: false)
+													}
+												}
 											}
+											.navigationBarTitleDisplayMode(.inline)
+											.navigationTitle(donationsSection.id)
+										} label: {
+											donationSectionLabel(
+												title: donationsSection.id,
+												donations: Array(donationsSection)
+											)
 										}
 									}
 								} header: {
-									monthHeader(months: months)
-								}
-								.textCase(nil)
+									Text(Date.now.formatted(.dateTime.year()))
+										.font(.headline)
+								}.textCase(nil)
+							}
+
+							if sectionedPreviousYearDonations.isEmpty == false {
+								Section {
+									ForEach(sectionedPreviousYearDonations) { donationsSection in
+										NavigationLink {
+											DonationYearListView(dataController: dataController, year: donationsSection.id)
+										} label: {
+											donationSectionLabel(
+												title: "Donations in \(donationsSection.id)",
+												donations: Array(donationsSection)
+											)
+										}
+									}
+								} header: {
+									Text("Previous Years").font(.headline)
+								}.textCase(nil)
 							}
 						}
+						.listStyle(.insetGrouped)
+						.sheet(isPresented: $vm.showNewDonationSheet) {
+							NewDonationView(dataController: dataController)
+						}
 					}
-					.safeAreaInset(edge: .bottom) {
-						filterNotifier
-					}
+					.safeAreaInset(edge: .bottom) { filterNotifier }
 				}
 			}
-			.searchable(text: $vm.searchConfig.query, prompt: "Search Notes")
+			.searchable(text: $searchText, prompt: "Search Notes")
 			.toolbar(content: optionsMenu)
-			.navigationDestination(for: DonationEntity.self) { donation in
-				DonationDetailView(donation: donation)
-			}
-			.onChange(of: vm.searchConfig) { newConfig in
-				donations.nsPredicate = DonationEntity.filter(with: newConfig)
-
-				if vm.searchConfig.query.isEmpty {
-					vm.showNotes = false
-				} else {
-					vm.showNotes = true
-				}
-			}
-			.onChange(of: vm.sort) { newSort in
-				donations.nsSortDescriptors = DonationEntity.sort(order: newSort)
-			}
 			.navigationTitle("Donations")
 			.sheet(item: $vm.donationToEdit) {
 				vm.donationToEdit = nil // onDismiss
 			} content: { donation in
 				EditDonationView(dataController: dataController, donation: donation)
-	//			EditDonationView(vm: .init(provider: vm.dataController, donation: donation))
 			}
 			.onAppear {
 				if reviewsManager.canAskForReview(donationCount: donations.count) {
@@ -125,27 +172,10 @@ struct DonationsListView: View {
 
 // MARK: - Preview
 #Preview("List With Data") {
-	//	let preview = DataController.shared
 	DonationsListView(dataController: .preview)
 		.environmentObject(DataController.preview)
 		.environmentObject(ReviewRequestManager())
-	//		.environment(\.managedObjectContext, preview.viewContext)
-
-	//		.onAppear { DonationEntity.makePreview(count: 10, in: preview.viewContext) }
-
-	//	let preview = DataController.shared
-	//	return DonationsListView(vm: .init(dataController: .preview))
-	//		.environment(\.managedObjectContext, preview.viewContext)
-	//		.environmentObject(ReviewRequestManager())
-	//		.onAppear { DonationEntity.makePreview(count: 10, in: preview.viewContext) }
 }
-
-//#Preview("List With No Data") {
-//	let emptyPreview = DataController.shared
-//	return DonationsListView(vm: .init(dataController: .emptyPreview))
-//		.environment(\.managedObjectContext, emptyPreview.viewContext)
-//		.environmentObject(ReviewRequestManager())
-//}
 
 // MARK: - Views
 extension DonationsListView {
@@ -235,19 +265,6 @@ extension DonationsListView {
 	private func optionsMenu() -> some ToolbarContent {
 		ToolbarItem(placement: .primaryAction) {
 			Menu {
-				Picker("Sort", selection: $vm.sort) {
-					Text("Newest First").tag(Sort.newestFirst)
-					Text("Oldest First").tag(Sort.oldestFirst)
-				}
-
-				Picker("Filter Donations", selection: $vm.searchConfig.filter) {
-					Label("Show All", systemImage: "list.bullet")
-						.tag(SearchConfig.Filter.all)
-
-					Label("Show Low Protein", systemImage: "drop.triangle")
-						.tag(SearchConfig.Filter.lowProtein)
-				}
-
 				Button {
 					showEditNewDonation = true
 				} label: {
@@ -263,35 +280,18 @@ extension DonationsListView {
 
 		ToolbarItem {
 #if DEBUG
-			Button {
-				dataController.deleteAll()
-				dataController.createSampleData(count: 50)
-			} label: {
-				Label("ADD SAMPLES", systemImage: "flame")
-			}
+            Button("ADD SAMPLES", systemImage: "flame") {
+                dataController.deleteAll()
+                dataController.createSampleData(count: 75)
+            }
 #endif
 		}
 
 		ToolbarItem {
 #if DEBUG
-			Button {
-				dataController.deleteAll()
-			} label: {
-				Label("DELETE ALL", systemImage: "trash")
-			}
+            Button("DELETE ALL", systemImage: "trash", action: dataController.deleteAll)
 #endif
 		}
-	}
-
-	@ViewBuilder
-	private func monthHeader(months: [DonationEntity]) -> some View {
-		let isSameYear = Calendar.current.isDate(months[0].donationStartTime, equalTo: .now, toGranularity: .year)
-		let yearText = isSameYear ? "" : ", \(months[0].donationStartTime.formatted(.dateTime.year()))"
-
-		Text("\(months[0].donationStartTime, format: .dateTime.month(.wide))\(yearText)")
-			.foregroundColor(.secondary)
-			.font(.headline)
-			.bold()
 	}
 
 	private func deleteButton(donation: DonationEntity) -> some View {
@@ -309,6 +309,19 @@ extension DonationsListView {
 			Label("Edit", systemImage: "pencil")
 		}
 		.tint(.orange)
+	}
+
+	private func donationSectionLabel(title: String, donations: [DonationEntity]) -> some View {
+		let total = donations.reduce(0) { $0 + Int($1.compensation) }
+		let formatted = NumberFormatter.currency.string(from: NSNumber(value: total)) ?? ""
+
+		return VStack(alignment: .leading) {
+			Text(title)
+				.font(.headline)
+			Text("\(donations.count) Donations · \(formatted)")
+				.font(.subheadline)
+				.foregroundStyle(.secondary)
+		}
 	}
 }
 

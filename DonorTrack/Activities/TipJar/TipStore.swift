@@ -62,8 +62,8 @@ final class TipStore: ObservableObject {
 
 	var error: TipJarError? {
 		switch action {
-		case .failed(let err):
-			return err
+		case .failed(let error):
+			return error
 		default:
 			return nil
 		}

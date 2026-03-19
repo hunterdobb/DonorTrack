@@ -16,31 +16,32 @@ struct DonationRowView: View {
     // on the main context within this view
     // 'try provider.persist(in: moc)' is an example of it in use
     @Environment(\.managedObjectContext) private var moc
-    
+	@EnvironmentObject var dataController: DataController
+
     // If we wanted to make changes to the moc from this view,
     // such as tapping a star to mark something as favorite,
     // we would need to mark our donation object as an ObservedObject
     // so the views re-draw
     @ObservedObject var donation: DonationEntity
-    let dataController: DataController
+//    let dataController: DataController
 
-    @Binding var showNotes: Bool
+    var showNotes: Bool
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack {
-                dateAndTimeInfo
+		VStack(alignment: .leading, spacing: 10) {
+			HStack {
+				dateAndTimeInfo
 
-                Spacer()
+				Spacer()
 
-                HStack(spacing: 8) {
+				HStack(spacing: 8) {
 					Text("\(donation.protein, specifier: "%.1f")")
-                }
-            }
+				}
+			}
 
 			donationNote
-        }
-    }
+		}
+	}
 }
 
 //struct DonationRowView_Previews: PreviewProvider {
@@ -77,8 +78,8 @@ extension DonationRowView {
                     Text(donation.donationStartTime, style: .time)
                     Text("(\(donation.durationString))")
                 }
-                .font(.footnote)
-                .foregroundColor(.secondary)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
             }
         }
     }

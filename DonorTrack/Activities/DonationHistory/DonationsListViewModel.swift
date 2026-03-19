@@ -25,17 +25,18 @@ extension DonationsListView {
 	@dynamicMemberLookup
     @MainActor
     class ViewModel: ObservableObject {
-        private let context: NSManagedObjectContext
-        var dataController: DataController // I made this un-private to pass it into another view?
+        var dataController: DataController
 
-        @Published var showNotes = false
         @Published var donationToEdit: DonationEntity?
         @Published var searchConfig = SearchConfig()
-        @Published var sort: Sort = .newestFirst
+		@Published var showNewDonationSheet = false
+
+		var showNotes: Bool {
+			dataController.searchText.isEmpty == false
+		}
 
         init(dataController: DataController) {
             self.dataController = dataController
-            self.context = dataController.viewContext
         }
 
 		subscript<Value>(dynamicMember keyPath: KeyPath<DataController, Value>) -> Value {
@@ -45,26 +46,6 @@ extension DonationsListView {
 		subscript<Value>(dynamicMember keyPath: ReferenceWritableKeyPath<DataController, Value>) -> Value {
 			get { dataController[keyPath: keyPath] }
 			set { dataController[keyPath: keyPath] = newValue }
-		}
-
-//		func newDonationToEdit() {
-//			let tempContext = NSManagedObjectContext(.mainQueue)
-//			tempContext.parent = dataController.container.viewContext
-//			print(tempContext)
-//			donationToEdit = DonationEntity(context: tempContext)
-////			donationToEdit = dataController.newTemporaryDonation()
-//		}
-
-		func groupDonationsByMonth(_ result: FetchedResults<DonationEntity>) -> [[DonationEntity]] {
-			Dictionary(grouping: result) { (donation: DonationEntity) in
-				donation.donationStartTime.month
-			}.values.sorted {
-				if sort == .newestFirst {
-					return $0[0].donationStartTime > $1[0].donationStartTime
-				} else {
-					return $0[0].donationStartTime < $1[0].donationStartTime
-				}
-			}
 		}
 
 		func totalEarnedAllTime(_ donations: FetchedResults<DonationEntity>) -> Double {

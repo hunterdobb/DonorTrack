@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EditDonationView: View {
-	@EnvironmentObject var dataController: DataController
+//	@EnvironmentObject var dataController: DataController
 //    @ObservedObject var vm: ViewModel
 	@StateObject var vm: ViewModel
     @Environment(\.dismiss) private var dismiss
@@ -29,15 +29,20 @@ struct EditDonationView: View {
     var body: some View {
         NavigationStack {
             List {
-				Section("Time", content: timeSection)
+                // Sets the duration as the footer since it's not editable
+                // TODO: Should be editable someday
+//                Section { timeSection() } header: { Text("Time") } footer: {
+//                    Text("Duration: \(vm.donation.durationString)")
+//                        .frame(maxWidth: .infinity, alignment: .trailing)
+//                }
+
+                Section("Time", content: timeSection)
 				Section("Info", content: infoSection)
                 Section("Notes", content: notesSection)
 
 				if vm.isNew == false {
-					Button("Delete Donation", systemImage: "trash", role: .destructive) {
-						dataController.delete(vm.donation)
-					}
-					.foregroundStyle(.red)
+					Button("Delete Donation", systemImage: "trash", action: vm.deleteDonationTapped)
+						.foregroundStyle(.red)
 				}
             }
             .navigationTitle(vm.isNew ? Text("Manual Entry") : Text("Edit Donation"))
@@ -46,6 +51,9 @@ struct EditDonationView: View {
 			.toolbar {
 				cancelAction
 				doneAction
+			}
+			.confirmationDialog("Are you sure you want to delete this donation?", isPresented: $vm.showDeleteConfirmation, titleVisibility: .visible) {
+				Button("Delete", role: .destructive, action: vm.deleteCurrentDonation)
 			}
         }
 		.onAppear {

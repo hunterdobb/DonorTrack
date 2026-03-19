@@ -23,6 +23,15 @@ extension Date {
         let calendar = Calendar.current
         return calendar.date(from: calendar.dateComponents([.month, .year], from: self))!
     }
+
+	func startOfWeek(using calendar: Calendar = .current) -> Date {
+		calendar.dateComponents([.calendar, .yearForWeekOfYear, .weekOfYear], from: self).date!
+	}
+	func startOfWeekFiveWeeksAgo(using calendar: Calendar = .current) -> Date {
+		let fiveWeeksAgoInSeconds: TimeInterval = (86_400 * -7) * 5
+		let fiveWeeksAgo = Date.now.addingTimeInterval(fiveWeeksAgoInSeconds)
+		return fiveWeeksAgo.startOfWeek(using: calendar)
+	}
 }
 
 extension ClosedRange<Date> {

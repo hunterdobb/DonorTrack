@@ -27,6 +27,7 @@ extension EditDonationView {
         @Published var amountText = ""
         @Published var cycleCountText = ""
         @Published var notes = ""
+		@Published var showDeleteConfirmation = false
 
 //        @Published var showingAlert = false
 //        let alertTitle = "Fill out all the info before saving"
@@ -42,19 +43,27 @@ extension EditDonationView {
 			} else {
 				print("NEW")
 				let tempContext = NSManagedObjectContext(.mainQueue)
-				tempContext.parent = dataController.viewContext
+				tempContext.parent = dataController.container.viewContext
 				self.tempContext = tempContext
 				if let context = self.tempContext {
 					self.donation = DonationEntity(context: context)
 				} else {
 					print("ERROR")
-					self.donation = DonationEntity(context: dataController.viewContext)
+					self.donation = DonationEntity(context: dataController.container.viewContext)
 				}
 
 				donationDay = .now
 			}
 
         }
+
+		func deleteDonationTapped() {
+			showDeleteConfirmation = true
+		}
+
+		func deleteCurrentDonation() {
+			dataController.delete(donation)
+		}
 
 		/// Updates the start and end times date when the user changes the date of a donation
 		/// - Parameter newValue: The new date the user selected
